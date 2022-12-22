@@ -18,15 +18,15 @@ class MainViewModel : ViewModel() {
         get() = _response
 
     /**
-     * Call getMarsRealEstateProperties() on init so we can display status immediately.
+     * Call getAsteroidProperties() on init so we can display status immediately.
      */
     init {
         getAsteroidProperties()
     }
 
     /**
-     * Sets the value of the response LiveData to the Mars API status or the successful number of
-     * Mars properties retrieved.
+     * Sets the value of the response LiveData to the Asteroid API status or the successful number of
+     * Asteroids retrieved.
      */
     private fun getAsteroidProperties() {
         AsteroidApi.retrofitService.getProperties().enqueue( object: Callback<String> {
