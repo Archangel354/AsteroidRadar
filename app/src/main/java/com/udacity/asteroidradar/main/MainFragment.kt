@@ -21,7 +21,6 @@ class MainFragment : Fragment() {
         binding.viewModel = viewModel
 
         setHasOptionsMenu(true)
-
         return binding.root
     }
 
@@ -30,7 +29,7 @@ class MainFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return true
-    }
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        return true
+//    }
 }

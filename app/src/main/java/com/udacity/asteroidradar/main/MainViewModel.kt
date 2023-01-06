@@ -1,12 +1,15 @@
 package com.udacity.asteroidradar.main
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.udacity.asteroidradar.PictureOfDay
 import com.udacity.asteroidradar.api.AsteroidApi
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import timber.log.Timber
 
 class MainViewModel : ViewModel() {
 
@@ -21,6 +24,7 @@ class MainViewModel : ViewModel() {
      * Call getAsteroidProperties() on init so we can display status immediately.
      */
     init {
+        Log.i("MainViewModel", "init")
         getAsteroidProperties()
     }
 
@@ -29,7 +33,8 @@ class MainViewModel : ViewModel() {
      * Asteroids retrieved.
      */
     private fun getAsteroidProperties() {
-        AsteroidApi.retrofitService.getProperties().enqueue( object: Callback<String> {
+        Log.i("MainViewModel", response.toString())
+        AsteroidApi.retrofitService.getProperties()?.enqueue( object: Callback<String> {
             override fun onFailure(call: Call<String>, t: Throwable) {
                 _response.value = "Failure: " + t.message
             }

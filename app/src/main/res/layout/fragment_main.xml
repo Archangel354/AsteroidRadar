@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable
             name="viewModel"
             type="com.udacity.asteroidradar.main.MainViewModel" />
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        tools:context="com.udacity.asteroidradar.MainActivity"
         android:background="@color/app_background">
 
         <FrameLayout
@@ -41,7 +42,11 @@
                 android:layout_gravity="bottom"
                 android:background="#55010613"
                 android:text="@{viewModel.response}"  />
-<!--                android:text="@string/image_of_the_day" -->
+
+
+
+            <!--                android:text="@string/image_of_the_day"/>-->
+
 
         </FrameLayout>
 
