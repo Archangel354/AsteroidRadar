@@ -8,6 +8,7 @@ import com.udacity.asteroidradar.Constants.BASE_URL
 import com.udacity.asteroidradar.PictureOfDay
 import org.json.JSONObject
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
@@ -17,24 +18,29 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
+
+//  Moshi Adapter
 private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
     .build()
 
 private val retrofit = Retrofit.Builder()
-    .addConverterFactory(ScalarsConverterFactory.create())
+    .addConverterFactory(MoshiConverterFactory.create(moshi))
     .baseUrl(BASE_URL)
     .build()
 
+object AsteroidApi {
+    val retrofitService : AsteroidApiService by lazy { retrofit.create(AsteroidApiService::class.java)
+    }
+
 interface AsteroidApiService {
     @GET("planetary/apod?api_key=ZYylBzfTBo7ZrIOHItyqefWq9OdE7h2lQGUk476L")
-    fun getProperties(): Call<String>
+        fun getProperties():Call<PictureOfDay>
+
+//    fun getProperties(): Call<List<PictureOfDay>>
 }
 
-object AsteroidApi {
-    val retrofitService : AsteroidApiService by lazy {
-        retrofit.create(AsteroidApiService::class.java)
-    }
+
 }
 
 

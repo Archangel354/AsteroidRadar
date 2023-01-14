@@ -4,12 +4,13 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.udacity.asteroidradar.PictureOfDay
 import com.udacity.asteroidradar.api.AsteroidApi
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import timber.log.Timber
 
 class MainViewModel : ViewModel() {
 
@@ -33,14 +34,28 @@ class MainViewModel : ViewModel() {
      * Asteroids retrieved.
      */
     private fun getAsteroidProperties() {
+//        viewModelScope.launch {
+//            try{
+//                var listResult = AsteroidApi.retrofitService.getProperties()
+//                _response.value = "Success: ${listResult} Picture properties retrieved"
+//
+//
+//            } catch (e: Exception) {
+//                _response.value = "Failure: ${e.message}"
+//            }
+//
+//
+//        }
+
+
         Log.i("MainViewModel", response.toString())
-        AsteroidApi.retrofitService.getProperties()?.enqueue( object: Callback<String> {
-            override fun onFailure(call: Call<String>, t: Throwable) {
+        AsteroidApi.retrofitService.getProperties().enqueue( object: Callback<PictureOfDay> {
+            override fun onFailure(call: Call<PictureOfDay>, t: Throwable) {
                 _response.value = "Failure: " + t.message
             }
 
-            override fun onResponse(call: Call<String>, response: Response<String>) {
-                _response.value = response.body()
+            override fun onResponse(call: Call<PictureOfDay>, response: Response<PictureOfDay>) {
+                _response.value = "Success: ${response.toString()} "
             }
         })
     }
