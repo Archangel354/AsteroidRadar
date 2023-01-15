@@ -60,6 +60,7 @@ class MainViewModel : ViewModel() {
 
                 val body = response.body()!!
                 val url = body.url
+                val title = body.title
                 _pictureData.value = body
                 Log.i("MainViewModel url", url)
             }
