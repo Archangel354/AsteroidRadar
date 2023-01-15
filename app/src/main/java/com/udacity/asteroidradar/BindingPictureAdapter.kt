@@ -6,12 +6,12 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
-@BindingAdapter("url")
+@BindingAdapter("imageUrl")
 fun bindImage(imgView: ImageView, url: String?) {
     url?.let {
-        val imgUri = url.toUri().buildUpon().scheme("https").build()
+        val url = url.toUri().buildUpon().scheme("https").build()
         Glide.with(imgView.context)
-            .load(imgUri)
+            .load(url)
             .apply(RequestOptions()
                 .placeholder(R.drawable.loading_animation)
                 .error(R.drawable.ic_broken_image))

@@ -61,7 +61,7 @@ class MainViewModel : ViewModel() {
                 val body = response.body()!!
                 val url = body.url
                 _pictureData.value = body
-                    Log.i("MainViewModel url", url)
+                Log.i("MainViewModel url", url)
             }
         })
     }
