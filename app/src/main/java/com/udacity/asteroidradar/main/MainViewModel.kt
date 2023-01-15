@@ -19,6 +19,12 @@ class MainViewModel : ViewModel() {
     val status: LiveData<String>
         get() = _status
 
+    // add an encapsulated LiveData<PictureOfDay> pictureData
+    private val _pictureData = MutableLiveData<PictureOfDay>()
+
+    val pictureData: LiveData<PictureOfDay>
+    get() = _pictureData
+
     /**
      * Call getAsteroidProperties() on init so we can display status immediately.
      */
@@ -51,9 +57,11 @@ class MainViewModel : ViewModel() {
             override fun onResponse(call: Call<PictureOfDay>, response: Response<PictureOfDay>) {
                 _status.value = "Success: ${response} "
 
+
                 val body = response.body()!!
                 val url = body.url
-                Log.i("MainViewModel url", url)
+                _pictureData.value = body
+                    Log.i("MainViewModel url", url)
             }
         })
     }
