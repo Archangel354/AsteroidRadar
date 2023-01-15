@@ -4,10 +4,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.udacity.asteroidradar.PictureOfDay
 import com.udacity.asteroidradar.api.AsteroidApi
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -15,11 +13,11 @@ import retrofit2.Response
 class MainViewModel : ViewModel() {
 
     // The internal MutableLiveData String that stores the most recent response
-    private val _response = MutableLiveData<String>()
+    private val _status = MutableLiveData<String>()
 
     // The external immutable LiveData for the response String
-    val response: LiveData<String>
-        get() = _response
+    val status: LiveData<String>
+        get() = _status
 
     /**
      * Call getAsteroidProperties() on init so we can display status immediately.
@@ -39,23 +37,23 @@ class MainViewModel : ViewModel() {
 //                var listResult = AsteroidApi.retrofitService.getProperties()
 //                _response.value = "Success: ${listResult} Picture properties retrieved"
 //
-//
 //            } catch (e: Exception) {
 //                _response.value = "Failure: ${e.message}"
 //            }
-//
-//
 //        }
 
-
-        Log.i("MainViewModel", response.toString())
+        Log.i("MainViewModel", status.toString())
         AsteroidApi.retrofitService.getProperties().enqueue( object: Callback<PictureOfDay> {
             override fun onFailure(call: Call<PictureOfDay>, t: Throwable) {
-                _response.value = "Failure: " + t.message
+                _status.value = "Failure: " + t.message
             }
 
             override fun onResponse(call: Call<PictureOfDay>, response: Response<PictureOfDay>) {
-                _response.value = "Success: ${response.toString()} "
+                _status.value = "Success: ${response} "
+
+                val body = response.body()!!
+                val url = body.url
+                Log.i("MainViewModel url", url)
             }
         })
     }
