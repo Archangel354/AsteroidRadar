@@ -2,43 +2,38 @@ package com.udacity.asteroidradar.api
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.udacity.asteroidradar.Asteroid
-import com.udacity.asteroidradar.Constants
 import com.udacity.asteroidradar.Constants.BASE_URL
-import com.udacity.asteroidradar.PictureOfDay
-import org.json.JSONObject
+import com.udacity.asteroidradar.Asteroid
 import retrofit2.Call
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
-import retrofit2.http.Query
-import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
-//  Moshi Adapter
-private val moshi = Moshi.Builder()
-    .add(KotlinJsonAdapterFactory())
-    .build()
+////  Moshi Adapter
+//private val moshi = Moshi.Builder()
+//    .add(KotlinJsonAdapterFactory())
+//    .build()
 
 private val retrofit = Retrofit.Builder()
-    .addConverterFactory(MoshiConverterFactory.create(moshi))
+    .addConverterFactory(ScalarsConverterFactory.create())
     .baseUrl(BASE_URL)
     .build()
 
+interface AsteroidApiService {
+    @GET("neo/rest/v1/feed?start_date=2022-02-05&end_date=2022-02-06&api_key=ZYylBzfTBo7ZrIOHItyqefWq9OdE7h2lQGUk476L")
+    fun getProperties():
+            Call<String>
+}
+
 object AsteroidApi {
-    val retrofitService : AsteroidApiService by lazy { retrofit.create(AsteroidApiService::class.java)
+    val AsteroidRetrofitService : AsteroidApiService by lazy {
+        retrofit.create(AsteroidApiService::class.java)
     }
 
-interface AsteroidApiService {
-    @GET("planetary/apod?api_key=ZYylBzfTBo7ZrIOHItyqefWq9OdE7h2lQGUk476L")
-        fun getProperties():Call<PictureOfDay>
 
-//    fun getProperties(): Call<List<PictureOfDay>>
-}
 
 
 }
