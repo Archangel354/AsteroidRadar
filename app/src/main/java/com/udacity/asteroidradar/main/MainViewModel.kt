@@ -4,14 +4,24 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.udacity.asteroidradar.Asteroid
+import com.udacity.asteroidradar.Constants.APIKEY
+import com.udacity.asteroidradar.Constants.CURRENTDATE
+import com.udacity.asteroidradar.Constants.YESTERDAYDATE
 import com.udacity.asteroidradar.PictureOfDay
 import com.udacity.asteroidradar.api.PictureApi
 import com.udacity.asteroidradar.api.AsteroidApi
+import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
+import kotlinx.coroutines.launch
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.LocalDate
 
 class MainViewModel : ViewModel() {
+
 
     // The internal MutableLiveData String that stores the most recent response
     private val _status = MutableLiveData<String>()
@@ -72,14 +82,18 @@ class MainViewModel : ViewModel() {
      */
     private fun getAsteroidProperties() {
         Log.i("MainViewModel", "getAsteroidProperties")
-        AsteroidApi.AsteroidRetrofitService.getProperties().enqueue(object : Callback<String> {
-            override fun onFailure(call: Call<String>, t: Throwable) {
-                _response.value = "Failure: " + t.message
-            }
+//        AsteroidApi.AsteroidRetrofitService.getProperties(YESTERDAYDATE,CURRENTDATE, APIKEY).enqueue(object : Callback<Asteroid> {
+//            override fun onFailure(call: Call<Asteroid>, t: Throwable) {
+//                _response.value = "Failure: " + t.message
+        viewModelScope.launch {
+            try {
+                var asteroidList = AsteroidApi.AsteroidRetrofitService.getProperties()
+                   if (asteroidList.size > 0)
+                       _response.value = asteroidList[0].toString()
 
-            override fun onResponse(call: Call<String>, response: Response<String>) {
-                _response.value = response.body()
+            } catch (e: Exception) {
+                Log.d("Failed Asteroids", "Error: ${e.localizedMessage}")
             }
-        })
+        }
     }
 }
