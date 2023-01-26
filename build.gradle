@@ -6,7 +6,7 @@ buildscript {
         // navigation where the versions of the plugin needs to be the same as the version of the
         // library defined in the app Gradle file
         kotlin_version = '1.7.20'
-        version_android_gradle_plugin = '7.3.1'
+        version_android_gradle_plugin = '7.4.0'
         version_gradle = '7.3.1'
         version_core = "1.9.0"
         version_coroutine = "1.6.4"
