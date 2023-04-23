@@ -65,8 +65,6 @@ class MainViewModel : ViewModel() {
 
             override fun onResponse(call: Call<PictureOfDay>, response: Response<PictureOfDay>) {
                 _status.value = "Success: ${response} "
-
-
                 val body = response.body()!!
                 val url = body.url
                 val title = body.title
@@ -76,24 +74,21 @@ class MainViewModel : ViewModel() {
         })
     }
 
-    /**
-     * Sets the value of the response LiveData to the Asteroid API status or the successful number of
-     * Asteroids retrieved.
-     */
+    /** * Sets the value of the response LiveData to the Asteroid API status or the successful number of  * Asteroids retrieved.  */
     private fun getAsteroidProperties() {
         Log.i("MainViewModel", "getAsteroidProperties")
-//        AsteroidApi.AsteroidRetrofitService.getProperties(YESTERDAYDATE,CURRENTDATE, APIKEY).enqueue(object : Callback<Asteroid> {
-//            override fun onFailure(call: Call<Asteroid>, t: Throwable) {
-//                _response.value = "Failure: " + t.message
-        viewModelScope.launch {
-            try {
-                var asteroidList = AsteroidApi.AsteroidRetrofitService.getProperties()
-                   if (asteroidList.size > 0)
-                       _response.value = asteroidList[0].toString()
-
-            } catch (e: Exception) {
-                Log.d("Failed Asteroids", "Error: ${e.localizedMessage}")
+        AsteroidApi.AsteroidRetrofitService.getProperties().enqueue(object : Callback<Asteroid> {
+            override fun onFailure(call: Call<Asteroid>, t: Throwable) {
+                Log.i("getAsteroid properties Failed",t.message.toString())
+                _response.value = "Failure: " + t.message
             }
-        }
-    }
+
+            override fun onResponse(call: Call<Asteroid>, response: Response<Asteroid>) {
+                _response.value = "Success: ${response}"
+                val body = response.body()!!
+                val codeName = body.codename
+                Log.i("MainViewModel codename", codeName)
+            }
+    })
+}
 }

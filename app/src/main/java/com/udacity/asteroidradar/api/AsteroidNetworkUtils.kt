@@ -5,6 +5,9 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.udacity.asteroidradar.Constants.BASE_URL
 import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.Constants
+import com.udacity.asteroidradar.Constants.APIKEY
+import com.udacity.asteroidradar.Constants.CURRENTDATE
+import com.udacity.asteroidradar.Constants.YESTERDAYDATE
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -28,15 +31,16 @@ private val retrofit = Retrofit.Builder()
 
 interface AsteroidApiService {
     @GET("neo/rest/v1/feed?start_date=2022-02-05&end_date=2022-02-06&api_key=ZYylBzfTBo7ZrIOHItyqefWq9OdE7h2lQGUk476L")
-    fun getProperties(): List<Asteroid>}
+    fun getProperties(): Call<Asteroid>}
 
 //interface AsteroidApiService {
 //    @GET("neo/rest/v1/feed")
-//    suspend fun getProperties(
-//        @Query("start_date") startDate: String,
-//        @Query("end_date") endDate: String,
-//        @Query("api_key") apiKey: String
+//    fun getProperties(
+//        @Query("start_date") startDate: String = YESTERDAYDATE,
+//        @Query("end_date") endDate: String = CURRENTDATE,
+//        @Query("api_key") apiKey: String = APIKEY
 //    ): String
+//    fun getProperties(): Call<Asteroid>
 //}
 
 object AsteroidApi {

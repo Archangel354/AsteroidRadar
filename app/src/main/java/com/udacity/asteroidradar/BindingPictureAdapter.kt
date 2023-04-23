@@ -5,6 +5,8 @@ import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import android.util.Log
+
 
 @BindingAdapter("imageUrl")
 fun bindImage(imgView: ImageView, url: String?) {
@@ -16,6 +18,8 @@ fun bindImage(imgView: ImageView, url: String?) {
                 .placeholder(R.drawable.loading_animation)
                 .error(R.drawable.ic_broken_image))
             .into(imgView)
+
+        Log.i("bindImage0", "BindingPictureAdapter")
 
     }
 }

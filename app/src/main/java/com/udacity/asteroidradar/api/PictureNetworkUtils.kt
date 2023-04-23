@@ -1,5 +1,6 @@
 package com.udacity.asteroidradar.api
 
+import android.util.Log
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.udacity.asteroidradar.Constants.BASE_URL
@@ -16,6 +17,8 @@ private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
     .build()
 
+
+
 private val retrofit = Retrofit.Builder()
     .addConverterFactory(MoshiConverterFactory.create(moshi))
     .baseUrl(BASE_URL)
@@ -23,11 +26,15 @@ private val retrofit = Retrofit.Builder()
 
 object PictureApi {
     val PictureRetrofitService :PictureApiService by lazy { retrofit.create(PictureApiService::class.java)
+
+
     }
 
 interface PictureApiService {
     @GET("planetary/apod?api_key=ZYylBzfTBo7ZrIOHItyqefWq9OdE7h2lQGUk476L")
+
         fun getProperties():Call<PictureOfDay>
+
 }
 }
 
