@@ -5,6 +5,8 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.udacity.asteroidradar.Constants.BASE_URL
 import com.udacity.asteroidradar.PictureOfDay
+import com.udacity.asteroidradar.Constants
+import com.udacity.asteroidradar.Constants.APIKEY
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -31,7 +33,7 @@ object PictureApi {
     }
 
 interface PictureApiService {
-    @GET("planetary/apod?api_key=ZYylBzfTBo7ZrIOHItyqefWq9OdE7h2lQGUk476L")
+    @GET("planetary/apod?api_key="+APIKEY)
 
         fun getProperties():Call<PictureOfDay>
 
