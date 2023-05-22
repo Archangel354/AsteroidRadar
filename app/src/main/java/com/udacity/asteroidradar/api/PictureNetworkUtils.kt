@@ -13,13 +13,10 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import java.util.*
 
-
 //  Moshi Adapter
 private val moshi = Moshi.Builder()
-    .add(KotlinJsonAdapterFactory())
+    .addLast(KotlinJsonAdapterFactory())
     .build()
-
-
 
 private val retrofit = Retrofit.Builder()
     .addConverterFactory(MoshiConverterFactory.create(moshi))
@@ -27,17 +24,12 @@ private val retrofit = Retrofit.Builder()
     .build()
 
 object PictureApi {
-    val PictureRetrofitService :PictureApiService by lazy { retrofit.create(PictureApiService::class.java)
+    val PictureRetrofitService :PictureApiService by lazy { retrofit.create(PictureApiService::class.java)}
 
-
+    interface PictureApiService {
+        @GET("planetary/apod?api_key="+APIKEY)
+            fun getProperties():Call<PictureOfDay>
     }
-
-interface PictureApiService {
-    @GET("planetary/apod?api_key="+APIKEY)
-
-        fun getProperties():Call<PictureOfDay>
-
-}
 }
 
 

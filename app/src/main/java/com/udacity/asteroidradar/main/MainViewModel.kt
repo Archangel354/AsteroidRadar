@@ -43,6 +43,10 @@ class MainViewModel : ViewModel() {
     val response: LiveData<String>
         get() = _response
 
+    // add an encapsulated LiveData<Asteroid> pictureData
+    private val _asteroidData = MutableLiveData<Asteroid>()
+
+
     /**
      * Call getAsteroidProperties() on init so we can display status immediately.
      */
@@ -57,7 +61,7 @@ class MainViewModel : ViewModel() {
      * Sets the value of the response LiveData to the Picture API status
      */
     private fun getPictureProperties() {
-        Log.i("MainViewModel", status.toString())
+        Log.i("MainViewModel Picture", status.toString())
         PictureApi.PictureRetrofitService.getProperties().enqueue(object : Callback<PictureOfDay> {
             override fun onFailure(call: Call<PictureOfDay>, t: Throwable) {
                 _status.value = "Failure: " + t.message
@@ -76,7 +80,7 @@ class MainViewModel : ViewModel() {
 
     /** * Sets the value of the response LiveData to the Asteroid API status or the successful number of  * Asteroids retrieved.  */
     private fun getAsteroidProperties() {
-        Log.i("MainViewModel", "getAsteroidProperties")
+        Log.i("MainViewModel Asteroid", status.toString())
         AsteroidApi.AsteroidRetrofitService.getProperties().enqueue(object : Callback<Asteroid> {
             override fun onFailure(call: Call<Asteroid>, t: Throwable) {
                 Log.i("getAsteroid properties Failed",t.message.toString())
@@ -84,6 +88,7 @@ class MainViewModel : ViewModel() {
             }
 
             override fun onResponse(call: Call<Asteroid>, response: Response<Asteroid>) {
+                Log.i("MainViewModel codename", response.toString())
                 _response.value = "Success: ${response}"
                 val body = response.body()!!
                 val codeName = body.codename
