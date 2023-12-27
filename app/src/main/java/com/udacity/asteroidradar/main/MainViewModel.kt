@@ -22,13 +22,12 @@ import java.time.LocalDate
 
 class MainViewModel : ViewModel() {
 
-
     // The internal MutableLiveData String that stores the most recent response
-    private val _status = MutableLiveData<String>()
+    private val _asteroidLiveData = MutableLiveData<String>()
 
     // The external immutable LiveData for the response String
-    val status: LiveData<String>
-        get() = _status
+    val asteroidLiveData: LiveData<String>
+        get() = _asteroidLiveData
 
     // add an encapsulated LiveData<PictureOfDay> pictureData
     private val _pictureData = MutableLiveData<PictureOfDay>()
@@ -44,31 +43,34 @@ class MainViewModel : ViewModel() {
         get() = _response
 
     // add an encapsulated LiveData<Asteroid> pictureData
-    private val _asteroidData = MutableLiveData<Asteroid>()
+    private val _asteroidData = MutableLiveData<String>()
+
+    val asteroidData: LiveData<String>
+        get() = _asteroidData
 
 
     /**
-     * Call getAsteroidProperties() on init so we can display status immediately.
+     * Call getAsteroidProperties() on init so we can display asteroidLiveData immediately.
      */
     init {
         Log.i("MainViewModel", "init")
         getPictureProperties()
-        getAsteroidProperties()
+        getAsteroidProperties(CURRENTDATE, YESTERDAYDATE, APIKEY)
     }
 
 
     /**
-     * Sets the value of the response LiveData to the Picture API status
+     * Sets the value of the response LiveData to the Picture API asteroidLiveData
      */
     private fun getPictureProperties() {
-        Log.i("MainViewModel Picture", status.toString())
+        Log.i("MainViewModel Picture", asteroidLiveData.toString())
         PictureApi.PictureRetrofitService.getProperties().enqueue(object : Callback<PictureOfDay> {
             override fun onFailure(call: Call<PictureOfDay>, t: Throwable) {
-                _status.value = "Failure: " + t.message
+                _asteroidLiveData.value = "Failure: " + t.message
             }
 
             override fun onResponse(call: Call<PictureOfDay>, response: Response<PictureOfDay>) {
-                _status.value = "Success: ${response} "
+                _asteroidLiveData.value = "Success: ${response} "
                 val body = response.body()!!
                 val url = body.url
                 val title = body.title
@@ -78,22 +80,41 @@ class MainViewModel : ViewModel() {
         })
     }
 
-    /** * Sets the value of the response LiveData to the Asteroid API status or the successful number of  * Asteroids retrieved.  */
-    private fun getAsteroidProperties() {
-        Log.i("MainViewModel Asteroid", status.toString())
-        AsteroidApi.AsteroidRetrofitService.getProperties().enqueue(object : Callback<Asteroid> {
-            override fun onFailure(call: Call<Asteroid>, t: Throwable) {
-                Log.i("getAsteroid properties Failed",t.message.toString())
-                _response.value = "Failure: " + t.message
-            }
+    /** * Sets the value of the response LiveData to the Asteroid API asteroidLiveData or the successful number of  * Asteroids retrieved.  */
+//    private fun getAsteroidProperties() {
+//        Log.i("MainViewModel Asteroid", asteroidLiveData.toString())
+//        AsteroidApi.AsteroidRetrofitService.getProperties().enqueue(object : Callback<String> {
+//            override fun onFailure(call: Call<String>, t: Throwable) {
+//                Log.i("getAsteroid properties Failed",t.message.toString())
+//                _asteroidLiveData.value = "Failure: " + t.message
+//            }
+//
+//            override fun onResponse(call: Call<String>, response: Response<String>) {
+//                Log.i("MainViewModel codename", response.toString())
+//                val jsonObject = JSONObject(response.body()!!)
+//                parseAsteroidsJsonResult(jsonObject)
+//                _response.value = "Success: ${response}"
+//                val body = response.body()!!
+//            }
+//    })
+//}
 
-            override fun onResponse(call: Call<Asteroid>, response: Response<Asteroid>) {
-                Log.i("MainViewModel codename", response.toString())
-                _response.value = "Success: ${response}"
-                val body = response.body()!!
-                val codeName = body.codename
-                Log.i("MainViewModel codename", codeName)
+        private fun getAsteroidProperties(startDate: String,endDate: String, apiKey: String) {
+        viewModelScope.launch {
+            try {
+        Log.i("MainViewModel Asteroid", asteroidLiveData.toString())
+                var listResult = AsteroidApi.AsteroidRetrofitService.getProperties(CURRENTDATE, YESTERDAYDATE, APIKEY)
+                Log.i("MainViewModel size",  listResult.toString())
+
+                if (listResult == null) {
+                    //_asteroidData.value = listResult[0]
+                    Log.i("MainViewModel listResult",  _asteroidData.value.toString())
+
+                }
+            } catch (e: Exception) {
+                _asteroidLiveData.value = "Failure: ${e.message}"
             }
-    })
-}
+        }
+    }
+
 }

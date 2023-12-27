@@ -43,12 +43,7 @@
                 android:layout_gravity="bottom"
                 android:background="#55010613"
                 android:text="@{viewModel.pictureData.title}"  />
-<!--                            android:text="@{viewModel.response}"  />-->
-
-
-
-            <!--                android:text="@string/image_of_the_day"/>-->
-
+<!--                android:text="@{viewModel.asteroidData.codename}"  />-->
 
         </FrameLayout>
 

@@ -1,17 +1,17 @@
 package com.udacity.asteroidradar.api
 
+import android.util.Log
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.udacity.asteroidradar.Constants.BASE_URL
 import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.Constants
 import com.udacity.asteroidradar.Constants.APIKEY
+import com.udacity.asteroidradar.Constants.BASE_URL
 import com.udacity.asteroidradar.Constants.CURRENTDATE
 import com.udacity.asteroidradar.Constants.YESTERDAYDATE
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -25,23 +25,24 @@ private val moshi = Moshi.Builder()
     .build()
 
 private val retrofit = Retrofit.Builder()
-    .addConverterFactory(MoshiConverterFactory.create(moshi))
+    .addConverterFactory(ScalarsConverterFactory.create())
     .baseUrl(BASE_URL)
     .build()
 
-interface AsteroidApiService {
-    @GET("neo/rest/v1/feed?start_date=2022-02-05&end_date=2022-02-06&api_key=ZYylBzfTBo7ZrIOHItyqefWq9OdE7h2lQGUk476L")
-    fun getProperties(): Call<Asteroid>}
-
 //interface AsteroidApiService {
-//    @GET("neo/rest/v1/feed")
-//    fun getProperties(
-//        @Query("start_date") startDate: String = YESTERDAYDATE,
-//        @Query("end_date") endDate: String = CURRENTDATE,
-//        @Query("api_key") apiKey: String = APIKEY
-//    ): String
-//    fun getProperties(): Call<Asteroid>
+//    @GET("neo/rest/v1/feed?start_date=YESTERDAYDATE&end_date=CURRENTDATE&api_key=ZYylBzfTBo7ZrIOHItyqefWq9OdE7h2lQGUk476L")
+//    fun getProperwhaties(): Call<String>
 //}
+
+interface AsteroidApiService {
+    @GET("neo/rest/v1/feed")
+     fun getProperties(
+        @Query("start_date") YESTERDAYDATE: String,
+        @Query("end_date") CURRENTDATE: String,
+        @Query("api_key") APIKEY: String
+    ): Call<String>
+   // fun getProperties(): Call<String>
+}
 
 object AsteroidApi {
     val AsteroidRetrofitService : AsteroidApiService by lazy {
@@ -67,6 +68,10 @@ fun parseAsteroidsJsonResult(jsonResult: JSONObject): ArrayList<Asteroid> {
                 val absoluteMagnitude = asteroidJson.getDouble("absolute_magnitude_h")
                 val estimatedDiameter = asteroidJson.getJSONObject("estimated_diameter")
                     .getJSONObject("kilometers").getDouble("estimated_diameter_max")
+
+                Log.i(" AsteroidNetworkUtils id is",id.toString())
+                Log.i("AsteroidNetworkUtils codename is",codename.toString())
+
 
                 val closeApproachData = asteroidJson
                     .getJSONArray("close_approach_data").getJSONObject(0)

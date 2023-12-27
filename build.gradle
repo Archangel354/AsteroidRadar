@@ -6,7 +6,7 @@ buildscript {
         // navigation where the versions of the plugin needs to be the same as the version of the
         // library defined in the app Gradle file
         kotlin_version = '1.8.20'
-        version_android_gradle_plugin = '8.0.1'
+        version_android_gradle_plugin = '8.2.0'
         version_gradle = '7.3.1'
         version_core = "1.9.0"
         version_coroutine = "1.6.4"
@@ -35,7 +35,7 @@ buildscript {
         classpath "com.android.tools.build:gradle:$version_android_gradle_plugin"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$version_kotlin"
         //classpath "android.arch.navigation:navigation-safe-args-gradle-plugin:$version_navigation"
-        classpath('androidx.navigation:navigation-safe-args-gradle-plugin:2.5.3')
+        classpath('androidx.navigation:navigation-safe-args-gradle-plugin:2.6.0')
     }
 }
 
@@ -44,6 +44,12 @@ allprojects {
         google()
         mavenCentral()
         maven { url='https://jitpack.io'}
+
+        tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+            kotlinOptions {
+                jvmTarget = "1.8"
+            }
+        }
         
     }
 }
